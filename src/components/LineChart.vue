@@ -76,17 +76,29 @@ export default {
     return {
       chartData: {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
+          "1964",
+          "Truman",
+          "Einsenhower",
+          "Kennedy",
+          "Johnson",
+          "Nixon",
+          "Ford",
+          "Carter",
+          "Reagan",
+          "Bush",
+          "Clinton",
+          "Bush",
+          "Obama",
+          "Trump",
         ],
         datasets: [
           {
-            label: "Data One",
+            label: "Roosevelt",
+            backgroundColor: "#f0f8ff",
+            data: [40, 39, 10, 40, 39, 80, 40],
+          },
+          {
+            label: "Data Two",
             backgroundColor: "#f87979",
             data: [40, 39, 10, 40, 39, 80, 40],
           },
@@ -104,6 +116,19 @@ export default {
   methods: {
     displayDataFromCsv: function () {
       console.log(csv);
+      let data = [];
+      let labels = [];
+
+      for (let i = 0; i < csv.length; i++) {
+        let date = csv[i].Date;
+        labels.push(date);
+        let president = csv[i].President;
+        data.push(president);
+        this.chartData.datasets[0].data = labels;
+      }
+      //this.chartData.datasets[0].data = data;
+      //this.chartData.datasets[0].data = csv.GetComponents();
+      //this.chartData.datasets[1].data = [80, 10, 10, 50, 40, 50, 60];
     },
   },
 };
