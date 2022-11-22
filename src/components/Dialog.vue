@@ -7,13 +7,12 @@
         {{ content }}
       </v-card-text>
 
-      <a :href="link">Source</a>
-
       <v-divider></v-divider>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="showDialog = false">Close</v-btn>
+        <v-btn color="primary" text :href="link">Source</v-btn>
+        <v-btn text @click="showDialog = false">Close</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

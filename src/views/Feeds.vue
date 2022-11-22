@@ -1,5 +1,5 @@
 <template>
-  <v-container class="feeds" pa-2 ma-0 fluid>
+  <v-container class="feeds" pa-2 ma-0 mb-8 fluid>
     <h1>Feeds</h1>
     <v-card max-width="2000" flat class="mx-auto">
       <v-row v-for="category in categories" :key="category.title">
@@ -92,6 +92,7 @@ export default {
       feeds: [
         "https://rss.politico.com/healthcare.xml",
         "https://rss.politico.com/economy.xml",
+        "https://rss.politico.com/politics-news.xml",
       ],
       showDialog: false,
       dialog: {
