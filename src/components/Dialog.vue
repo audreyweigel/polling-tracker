@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="showDialog" width="500">
+  <v-dialog v-model="showDialog" min-width="500" max-width="1000">
     <v-card class="text-left text-justify">
       <v-container>
         <p class="text-h6 mb-2">{{ item.title }}</p>
@@ -20,6 +20,8 @@
           "
           :src="item['media:content'].$.url"
           class="mb-2"
+          max-height="400"
+          contain
         >
           <template slot="placeholder">
             <v-img src="../assets/politico-billboard.png"></v-img>
@@ -71,5 +73,8 @@ export default {
 <style scoped>
 ::v-deep .content-encoded * {
   width: 100%;
+}
+::v-deep video {
+  height: 400px;
 }
 </style>
