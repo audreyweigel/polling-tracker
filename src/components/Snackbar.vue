@@ -1,6 +1,6 @@
 <template>
   <v-snackbar :timeout="-1" :value="msg" tile color="red accent-2">
-    <span>{{ msg }}</span>
+    <div v-html="msg"></div>
     <template v-slot:action="{ attrs }">
       <v-btn text v-bind="attrs" @click="$emit('update', '')"> Close </v-btn>
     </template>

@@ -2,9 +2,29 @@
   <v-container class="feeds" pa-2 ma-0 mb-8 fluid>
     <h1>Feeds</h1>
     <v-card max-width="2000" flat class="mx-auto">
+      <v-row v-if="loading" class="px-16">
+        <template v-for="n in 3">
+          <v-col :key="n" class="mt-2" cols="12">
+            <strong>Loading Categories...</strong>
+          </v-col>
+          <v-col
+            v-for="j in columns"
+            :key="`${n}${j}`"
+            :cols="Math.ceil(12 / columns)"
+          >
+            <v-skeleton-loader
+              class="mx-auto"
+              max-width="300"
+              type="card"
+            ></v-skeleton-loader>
+          </v-col>
+        </template>
+      </v-row>
+
       <v-row v-for="category in categories" :key="category.title">
-        <v-col :key="category.title" class="mt-2" cols="12">
-          <strong>{{ category.title }}</strong>
+        <v-col class="mt-2" cols="12">
+          <p class="font-weight-bold mb-0">{{ category.title }}</p>
+          <p class="font-weight-light mt-0">{{ category.description }}</p>
         </v-col>
 
         <v-carousel height="200" :continuous="false" hide-delimiters>
@@ -12,6 +32,7 @@
             v-for="page in Math.ceil(category.items.length / columns)"
             :key="`${category}-${page}`"
             class="px-16"
+            eager
           >
             <v-row>
               <v-col
@@ -22,11 +43,6 @@
                 :key="`${category}-${page}-${card}`"
                 :cols="Math.ceil(12 / columns)"
               >
-                <!-- <v-skeleton-loader
-                class="mx-auto"
-                max-width="300"
-                type="card"
-              ></v-skeleton-loader> -->
                 <v-card
                   @click="cardClick(getItemFromCategory(category, page, card))"
                 >
@@ -36,16 +52,27 @@
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                     height="200px"
                   >
-                    <p class="text-justify text-h6 px-2">
-                      {{
-                        getItemFromCategory(category, page, card)?.title || ""
-                      }}
-                    </p>
-                    <p class="text-justify text-caption px-2">
-                      {{
-                        getItemFromCategory(category, page, card)?.pubDate || ""
-                      }}
-                    </p>
+                    <template slot="placeholder">
+                      <v-img src="../assets/politico-billboard.png"></v-img>
+                    </template>
+                    <v-card
+                      tile
+                      dark
+                      color="rgba(0, 0, 0, 0.5)"
+                      class="mb-0 pb-0"
+                    >
+                      <p class="text-justify text-h6 px-2">
+                        {{
+                          getItemFromCategory(category, page, card)?.title || ""
+                        }}
+                      </p>
+                      <p class="text-justify text-caption px-2">
+                        {{
+                          getItemFromCategory(category, page, card)?.pubDate ||
+                          ""
+                        }}
+                      </p>
+                    </v-card>
                   </v-img>
                 </v-card>
               </v-col>
@@ -60,6 +87,7 @@
       :title="dialog.title"
       :content="dialog.content"
       :link="dialog.link"
+      :item="dialog.item"
     ></Dialog>
   </v-container>
 </template>
@@ -86,7 +114,7 @@ export default {
   },
   data() {
     return {
-      imgUrl: "",
+      loading: true,
       snackbarMsg: "",
       categories: [],
       feeds: [
@@ -96,9 +124,7 @@ export default {
       ],
       showDialog: false,
       dialog: {
-        title: "",
-        content: "",
-        link: "",
+        item: {},
       },
     };
   },
@@ -113,12 +139,13 @@ export default {
             .parseURL("http://localhost:8081/" + rssFeed)
             .then((feed) => {
               this.categories.push(feed);
+              this.loading = false;
               console.log(feed);
             });
         })
       ).catch((error) => {
         this.snackbarMsg =
-          "Is the CORS dev server running? Try: npm run cors-dev-server";
+          "Is the CORS dev server running? Try running<br><code>npm run cors-dev-server</code>";
         console.log(error);
       });
     },
@@ -135,9 +162,7 @@ export default {
       }
     },
     cardClick(item) {
-      this.dialog.title = item.title;
-      this.dialog.content = item.content;
-      this.dialog.link = item.link;
+      this.dialog.item = item;
       this.showDialog = true;
     },
   },
