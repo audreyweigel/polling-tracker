@@ -2,7 +2,8 @@
   <div id="app">
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/example-charts">Example Charts</router-link>
+      <router-link to="/example-charts">Example Charts</router-link> |
+      <router-link to="/feeds">Feeds</router-link>
     </nav>
     <router-view />
   </div>

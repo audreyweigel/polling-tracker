@@ -1,3 +1,5 @@
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+
 module.exports = {
   transpileDependencies: ["vuetify"],
   configureWebpack: {
@@ -14,5 +16,6 @@ module.exports = {
         },
       ],
     },
+    plugins: [new NodePolyfillPlugin()],
   },
 };
