@@ -114,6 +114,24 @@ export default {
     this.displayDataFromCsv(csv);
   },
   methods: {
+    uniquePresidents: function (data) {
+      let president = [];
+      for (let i = 0; i < data.length; i++) {
+        if (!president.includes(data[i].president)) {
+          president.push(data[i].president);
+        }
+      }
+      return president;
+    },
+    uniqueDates: function (data) {
+      let date = [];
+      for (let i = 0; i < data.length; i++) {
+        if (!date.includes(data[i].date)) {
+          date.push(data[i].date);
+        }
+      }
+      return date;
+    },
     displayDataFromCsv: function () {
       console.log(csv);
       let data = [];
@@ -124,9 +142,8 @@ export default {
         labels.push(date);
         let president = csv[i].President;
         data.push(president);
-        this.chartData.datasets[0].data = labels;
       }
-      //this.chartData.datasets[0].data = data;
+      this.chartData.datasets[0].data = data;
       //this.chartData.datasets[0].data = csv.GetComponents();
       //this.chartData.datasets[1].data = [80, 10, 10, 50, 40, 50, 60];
     },
