@@ -85,11 +85,6 @@ export default {
           "Ford",
           "Carter",
           "Reagan",
-          "Bush",
-          "Clinton",
-          "Bush",
-          "Obama",
-          "Trump",
         ],
         datasets: [
           {
@@ -115,37 +110,58 @@ export default {
   },
   methods: {
     uniquePresidents: function (data) {
-      let president = [];
-      for (let i = 0; i < data.length; i++) {
-        if (!president.includes(data[i].president)) {
-          president.push(data[i].president);
-        }
-      }
-      return president;
+      // get presidents from presidents column
+      const presidents = data.map((row) => row["President"]);
+      // remove duplicates
+      const uniquePresidents = [...new Set(presidents)].sort();
+      return uniquePresidents;
     },
     uniqueDates: function (data) {
-      let date = [];
-      for (let i = 0; i < data.length; i++) {
-        if (!date.includes(data[i].date)) {
-          date.push(data[i].date);
-        }
-      }
-      return date;
+      const dates = data.map((row) => row["Date"]);
+      const uniqueDates = [...new Set(dates)].sort((a, b) => {
+        return a.slice(-4) - b.slice(-4);
+      });
+      return uniqueDates;
+    },
+    uniqueApproval: function (data) {
+      const approval = data.map((row) => row["Approve"]);
+      const uniqueApproval = [...new Set(approval)];
+      return uniqueApproval;
+    },
+    uniqueDisapproval: function (data) {
+      const disapproval = data.map((row) => row["Disapprove"]);
+      const uniqueDisapproval = [...new Set(disapproval)];
+      return uniqueDisapproval;
     },
     displayDataFromCsv: function () {
-      console.log(csv);
-      let data = [];
-      let labels = [];
-
-      for (let i = 0; i < csv.length; i++) {
-        let date = csv[i].Date;
-        labels.push(date);
-        let president = csv[i].President;
-        data.push(president);
+      // change the data to the format that chart.js needs
+      let data = csv;
+      let president = this.uniquePresidents(data);
+      let date = this.uniqueDates(data);
+      //let poll = this.uniquePolls(data);
+      let datasets = [];
+      for (let i = 0; i < president.length; i++) {
+        let data = [];
+        for (let j = 0; j < date.length; j++) {
+          let temp = data.filter((item) => item.date === date[j]);
+          if (temp.length > 0) {
+            data.push(temp[0].approval);
+          } else {
+            data.push(0);
+          }
+        }
+        datasets.push({
+          label: president[i],
+          backgroundColor:
+            "#" + Math.floor(Math.random() * 16777215).toString(16),
+          data: data,
+        });
       }
-      this.chartData.datasets[0].data = data;
-      //this.chartData.datasets[0].data = csv.GetComponents();
-      //this.chartData.datasets[1].data = [80, 10, 10, 50, 40, 50, 60];
+      this.chartData = {
+        labels: date,
+        datasets: datasets,
+      };
+      console.log(this.chartData);
     },
   },
 };
