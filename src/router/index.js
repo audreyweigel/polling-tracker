@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import ExampleCharts from "../views/ExampleCharts.vue";
+import Feeds from "../views/Feeds.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: "/example-charts",
     name: "example-charts",
     component: ExampleCharts,
+  },
+  {
+    path: "/feeds",
+    name: "feeds",
+    component: Feeds,
   },
 ];
 
