@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Polling Tracker Logo" src="../assets/Abraham_Lincoln.gif" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <HelloWorld msg="United States Presidential Approval Ratings" />
   </div>
 </template>
 

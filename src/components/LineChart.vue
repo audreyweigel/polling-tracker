@@ -113,12 +113,15 @@ export default {
       // get presidents from presidents column
       const presidents = data.map((row) => row["President"]);
       // remove duplicates
-      const uniquePresidents = [...new Set(presidents)].sort();
+      const uniquePresidents = [...new Set(presidents)];
       return uniquePresidents;
     },
     uniqueDates: function (data) {
       const dates = data.map((row) => row["Date"]);
       const uniqueDates = [...new Set(dates)].sort((a, b) => {
+        if (a.slice(-4) === b.slice(-4)) {
+          return a.slice(0, 2) - b.slice(0, 2);
+        }
         return a.slice(-4) - b.slice(-4);
       });
       return uniqueDates;
