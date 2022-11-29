@@ -15,6 +15,9 @@
 <script>
 import csv from "@/assets/approval_polls.csv";
 import { Line as LineChartGenerator } from "vue-chartjs/legacy";
+/*import { EventBus } from "/Users/audreywiggles/Documents/NodeProjects/polling-tracker/src/router/EventBus.js";
+import { mixIns, Line } from "vue-chartjs";
+const { reactiveProp } = mixIns;*/
 
 import {
   Chart as ChartJS,
@@ -39,9 +42,11 @@ ChartJS.register(
 
 export default {
   name: "LineChart",
+  //extends: Line,
   components: {
     LineChartGenerator,
   },
+  //mixins: [reactiveProp],
   props: {
     chartId: {
       type: String,
@@ -72,6 +77,15 @@ export default {
       default: () => [],
     },
   },
+  /*mounted() {
+    const self = this;
+    console.log(self);
+    this.options.onClick = function (e, tooltipItems) {
+      console.log(tooltipItems[0].__ob__);
+      EventBus.$emit("chart-click", tooltipItems[0].__index);
+    };
+    this.renderChart(this.chartData, this.options);
+  },*/
   data() {
     return {
       chartData: {

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import csv from "@/assets/approval_polls.csv";
 import { Bar } from "vue-chartjs/legacy";
 import {
   Chart as ChartJS,
@@ -77,6 +78,49 @@ export default {
         responsive: true,
       },
     };
+  },
+  created: function () {
+    this.displayDataFromCSV(csv);
+  },
+  methods: {
+    uniquePresidents: function (data) {
+      // get presidents from presidents column
+      const presidents = data.map((row) => row["President"]);
+      // remove duplicates
+      let uniquePresidents = new Set(presidents);
+      uniquePresidents.delete("/n");
+      uniquePresidents = [...uniquePresidents].sort();
+      return uniquePresidents;
+    },
+    uniqueApprovals: function (data) {
+      const approval = data.map((row) => row["Approve"]);
+      const uniqueApproval = [...new Set(approval)];
+      return uniqueApproval;
+    },
+    displayDataFromCSV: function () {
+      let data = csv;
+      let president = this.uniquePresidents(data);
+      let datasets = [];
+      for (let i = 0; i < president.length; i++) {
+        let presData = [];
+        // only return the highest approval rating for each president
+        presData.push(
+          data
+            .filter((row) => row["President"] === president[i])
+            .reduce((max, p) => (p["Approve"] > max ? p["Approve"] : max), 0)
+        );
+        datasets.push({
+          label: president[i],
+          backgroundColor:
+            "#" + Math.floor(Math.random() * 16777215).toString(16),
+          data: presData,
+        });
+      }
+      this.chartData = {
+        labels: president,
+        datasets: datasets,
+      };
+    },
   },
 };
 </script>
