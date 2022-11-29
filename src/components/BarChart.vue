@@ -72,7 +72,18 @@ export default {
     return {
       chartData: {
         labels: ["January", "February", "March"],
-        datasets: [{ data: [40, 20, 12] }],
+        datasets: [
+          {
+            label: "January",
+            data: [40, 20, 12],
+            backgroundColor: "#f87979",
+          },
+          {
+            label: "Febuary",
+            data: [20, 10, 22],
+            backgroundColor: "#f87979",
+          },
+        ],
       },
       chartOptions: {
         responsive: true,
@@ -88,7 +99,7 @@ export default {
       const presidents = data.map((row) => row["President"]);
       // remove duplicates
       let uniquePresidents = new Set(presidents);
-      uniquePresidents.delete("/n");
+      uniquePresidents.delete("\n");
       uniquePresidents = [...uniquePresidents].sort();
       return uniquePresidents;
     },
@@ -101,21 +112,27 @@ export default {
       let data = csv;
       let president = this.uniquePresidents(data);
       let datasets = [];
+      let presData = [];
       for (let i = 0; i < president.length; i++) {
-        let presData = [];
         // only return the highest approval rating for each president
         presData.push(
           data
             .filter((row) => row["President"] === president[i])
             .reduce((max, p) => (p["Approve"] > max ? p["Approve"] : max), 0)
         );
-        datasets.push({
-          label: president[i],
-          backgroundColor:
-            "#" + Math.floor(Math.random() * 16777215).toString(16),
-          data: presData,
-        });
       }
+      datasets.push({
+        label: "Approval Ratings",
+        backgroundColor:
+          "#" + Math.floor(Math.random() * 16777215).toString(16),
+        data: presData,
+      });
+      datasets.push({
+        label: "Disapproval Ratings",
+        backgroundColor:
+          "#" + Math.floor(Math.random() * 16777215).toString(16),
+        data: presData,
+      });
       this.chartData = {
         labels: president,
         datasets: datasets,
