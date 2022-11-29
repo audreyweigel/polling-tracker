@@ -113,7 +113,10 @@ export default {
       // get presidents from presidents column
       const presidents = data.map((row) => row["President"]);
       // remove duplicates
-      const uniquePresidents = [...new Set(presidents)];
+      let uniquePresidents = new Set(presidents);
+      // remove unnecessary "\n" entry
+      uniquePresidents.delete("\n");
+      uniquePresidents = [...uniquePresidents].sort();
       return uniquePresidents;
     },
     uniqueDates: function (data) {
@@ -139,25 +142,28 @@ export default {
     displayDataFromCsv: function () {
       // change the data to the format that chart.js needs
       let data = csv;
+      // let data = csv.splice(0, 500); // This uses a smaller amount of data for easier testing
       let president = this.uniquePresidents(data);
       let date = this.uniqueDates(data);
       //let poll = this.uniquePolls(data);
       let datasets = [];
       for (let i = 0; i < president.length; i++) {
-        let data = [];
+        let presData = [];
         for (let j = 0; j < date.length; j++) {
-          let temp = data.filter((item) => item.date === date[j]);
+          let temp = data.filter(
+            (item) => item.Date === date[j] && item.President === president[i]
+          );
           if (temp.length > 0) {
-            data.push(temp[0].approval);
+            presData.push(temp[0].Approve);
           } else {
-            data.push(0);
+            presData.push("N/A");
           }
         }
         datasets.push({
           label: president[i],
           backgroundColor:
             "#" + Math.floor(Math.random() * 16777215).toString(16),
-          data: data,
+          data: presData,
         });
       }
       this.chartData = {
