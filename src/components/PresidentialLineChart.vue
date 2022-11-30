@@ -1,69 +1,5 @@
 <template>
   <v-container>
-    <!-- <v-row>
-      <v-col cols="12" sm="6" md="4">
-        <v-menu
-          ref="startMenu"
-          v-model="startMenu"
-          :close-on-content-click="false"
-          :return-value.sync="start"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="start"
-              label="Start date"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="start" no-title scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="startMenu = false">
-              Cancel
-            </v-btn>
-            <v-btn text color="primary" @click="$refs.startMenu.save(start)">
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu>
-      </v-col> 
-      <v-col cols="12" sm="6" md="4">
-        <v-menu
-          ref="endMenu"
-          v-model="endMenu"
-          :close-on-content-click="false"
-          :return-value.sync="end"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="end"
-              label="End date"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="end" no-title scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="endMenu = false">
-              Cancel
-            </v-btn>
-            <v-btn text color="primary" @click="$refs.endMenu.save(end)">
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu>
-      </v-col> 
-    </v-row> -->
     <v-row>
       <v-col cols="12" sm="6">
         <v-select
@@ -100,22 +36,10 @@
 <script>
 import csv from "@/assets/approval_polls.csv";
 import { Line as LineChartGenerator } from "vue-chartjs/legacy";
+import commonMethods from "@/mixins/commonMethods.js";
 /*import { EventBus } from "/Users/audreywiggles/Documents/NodeProjects/polling-tracker/src/router/EventBus.js";
 import { mixIns, Line } from "vue-chartjs";
 const { reactiveProp } = mixIns;*/
-
-console.log(csv);
-csv.forEach((row) => {
-  if (row["Date"]) {
-    let dateParts = row["Date"].split("/");
-    let date = `${dateParts[2]}-${dateParts[1].padStart(
-      2,
-      "0"
-    )}-${dateParts[0].padStart(2, "0")}`;
-
-    row["Date"] = date;
-  }
-});
 
 import {
   Chart as ChartJS,
@@ -144,7 +68,7 @@ export default {
   components: {
     LineChartGenerator,
   },
-  //mixins: [reactiveProp],
+  mixins: [commonMethods],
   props: {
     chartId: {
       type: String,
@@ -215,10 +139,6 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      start: "Roosevelt",
-      end: "Obama",
-      startMenu: false,
-      endMenu: false,
       // show selected presidents on chart
       selectedPresidents: [],
     };
@@ -227,43 +147,22 @@ export default {
     this.displayDataFromCsv(csv);
   },
   watch: {
+    selectedPresidents() {
+      this.displayDataFromCsv();
+    },
     start() {
-      this.displayDataFromCsv(csv);
+      this.displayDataFromCsv();
     },
     end() {
-      this.displayDataFromCsv(csv);
+      this.displayDataFromCsv();
     },
   },
   methods: {
-    uniquePresidents: function (data) {
-      // get presidents from presidents column
-      const presidents = data.map((row) => row["President"]);
-      // remove duplicates
-      let uniquePresidents = new Set(presidents);
-      // remove unnecessary "\n" entry
-      uniquePresidents.delete("\n");
-      uniquePresidents = [...uniquePresidents].sort();
-      return uniquePresidents;
-    },
-    uniqueDates: function (data) {
-      const dates = data.map((row) => row["Date"]);
-      const uniqueDates = [...new Set(dates)].sort();
-      return uniqueDates;
-    },
-    uniqueApproval: function (data) {
-      const approval = data.map((row) => row["Approve"]);
-      const uniqueApproval = [...new Set(approval)];
-      return uniqueApproval;
-    },
-    uniqueDisapproval: function (data) {
-      const disapproval = data.map((row) => row["Disapprove"]);
-      const uniqueDisapproval = [...new Set(disapproval)];
-      return uniqueDisapproval;
-    },
-    limitDataDateRange(data) {
-      return data.filter(
-        (row) => row["Date"] >= this.start && row["Date"] <= this.end
+    presidentDates(data) {
+      let tempData = data.filter((row) =>
+        this.selectedPresidents.includes(row["President"])
       );
+      return this.uniqueDates(tempData);
     },
     displayDataFromCsv: function () {
       // change the data to the format that chart.js needs
@@ -271,17 +170,16 @@ export default {
       // let data = csv.splice(0, 500); // This uses a smaller amount of data for easier testing
       // console.log(csv);
       let data = this.limitDataDateRange(csv); // This uses a smaller amount of data for easier testing
-      let president = this.uniquePresidents(data);
-      this.presidents = president;
+      let president = this.selectedPresidents;
+      // this.presidents = president;
       let date = this.uniqueDates(data);
+      console.log(date);
       //let poll = this.uniquePolls(data);
       let datasets = [];
       for (let i = 0; i < president.length; i++) {
         let presData = [];
         for (let j = 0; j < date.length; j++) {
-          let temp = data.filter(
-            (item) => item.Date === date[j] && item.President === president[i]
-          );
+          let temp = data.filter((item) => item.Date === date[j]);
           if (temp.length > 0) {
             presData.push(temp[0].Approve);
           } else {
@@ -294,6 +192,8 @@ export default {
             "#" + Math.floor(Math.random() * 16777215).toString(16),
           data: presData,
         });
+        console.log(president[i]);
+        console.log(presData);
       }
       this.chartData = {
         labels: date,
@@ -305,6 +205,22 @@ export default {
   computed: {
     allPresidents() {
       return this.uniquePresidents(csv);
+    },
+    start() {
+      for (let i = 0; i < csv.length; i++) {
+        if (this.selectedPresidents.includes(csv[i]["President"])) {
+          return csv[i]["Date"];
+        }
+      }
+      return "";
+    },
+    end() {
+      for (let i = csv.length - 1; i >= 0; i--) {
+        if (this.selectedPresidents.includes(csv[i]["President"])) {
+          return csv[i]["Date"];
+        }
+      }
+      return "";
     },
   },
 };

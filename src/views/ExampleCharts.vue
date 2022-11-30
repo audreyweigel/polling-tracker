@@ -10,13 +10,13 @@
         approval ratings, that information was used to compare approval and
         disapproval ratings over time.
       </p>
-      <li></li>
+      <br />
       <p>
         The data was collected from Kaggle and was downloaded as a CSV file.
         Data Camp collected the data from Gallup and made it available to the
         public.
       </p>
-      <li></li>
+      <br />
       <h4>
         You can access the dataset
         <a
@@ -24,22 +24,22 @@
           >here!</a
         >
       </h4>
-      <li></li>
+      <br />
     </div>
     <v-tabs>
       <v-tab>Comparing Ratings</v-tab>
       <v-tab>Ratings Over Time</v-tab>
       <v-tab>Presidential Approval</v-tab>
       <v-tab-item>
-        <li></li>
+        <br />
         <h2>Highest Ratings</h2>
-        <li></li>
+        <br />
         <h3>
           Comparing every President's highest approval and disapproval ratings.
         </h3>
         <BarChart />
         <h2>Lowest Ratings</h2>
-        <li></li>
+        <br />
         <h3>
           Here we compare every President's lowest approval and disapproval
           ratings.
@@ -47,9 +47,9 @@
         <BarChartCopy />
       </v-tab-item>
       <v-tab-item>
-        <li></li>
+        <br />
         <h2>Approval Ratings Over Time</h2>
-        <li></li>
+        <br />
         <h3>
           Select a date range to visualize Presidential approval ratings over
           time.
@@ -57,9 +57,9 @@
         <LineChart />
       </v-tab-item>
       <v-tab-item>
-        <li></li>
+        <br />
         <h2>Presidential Approval</h2>
-        <li></li>
+        <br />
         <h3>
           Select different presidents to visualize their approval ratings over
           time.
@@ -73,7 +73,7 @@
 <script>
 import BarChart from "@/components/BarChartHighest";
 import BarChartCopy from "@/components/BarChartLowest";
-//import LineChart from "@/components/DateLineChart";
+import LineChart from "@/components/DateLineChart";
 import PresidentialLineChart from "@/components/PresidentialLineChart";
 
 export default {
@@ -81,7 +81,7 @@ export default {
   components: {
     BarChart,
     BarChartCopy,
-    //LineChart,
+    LineChart,
     PresidentialLineChart,
   },
 };
