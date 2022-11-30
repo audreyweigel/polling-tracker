@@ -23,7 +23,7 @@
       </v-tab-item>
       <v-tab-item>
         <LineChart />
-        <TrumanLineChart />
+        <!-- <TrumanLineChart /> -->
       </v-tab-item>
     </v-tabs>
   </v-container>
@@ -32,16 +32,16 @@
 <script>
 import BarChart from "@/components/BarChartHighest";
 import BarChartCopy from "@/components/BarChartLowest";
-//import LineChart from "@/components/LineChart";
-import TrumanLineChart from "@/components/TrumanLineChart";
+import LineChart from "@/components/LineChart";
+// import TrumanLineChart from "@/components/TrumanLineChart";
 
 export default {
   name: "ExampleCharts",
   components: {
     BarChart,
     BarChartCopy,
-    //LineChart,
-    TrumanLineChart,
+    LineChart,
+    // TrumanLineChart,
   },
 };
 </script>
