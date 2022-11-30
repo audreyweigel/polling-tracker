@@ -112,26 +112,35 @@ export default {
       let data = csv;
       let president = this.uniquePresidents(data);
       let datasets = [];
-      let presData = [];
+      let approvalData = [];
+      let disapprovalData = [];
       for (let i = 0; i < president.length; i++) {
         // only return the highest approval rating for each president
-        presData.push(
+        approvalData.push(
           data
             .filter((row) => row["President"] === president[i])
             .reduce((max, p) => (p["Approve"] > max ? p["Approve"] : max), 0)
+        );
+        disapprovalData.push(
+          data
+            .filter((row) => row["President"] === president[i])
+            .reduce(
+              (max, p) => (p["Disapprove"] > max ? p["Disapprove"] : max),
+              0
+            )
         );
       }
       datasets.push({
         label: "Approval Ratings",
         backgroundColor:
           "#" + Math.floor(Math.random() * 16777215).toString(16),
-        data: presData,
+        data: approvalData,
       });
       datasets.push({
         label: "Disapproval Ratings",
         backgroundColor:
           "#" + Math.floor(Math.random() * 16777215).toString(16),
-        data: presData,
+        data: disapprovalData,
       });
       this.chartData = {
         labels: president,
