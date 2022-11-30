@@ -65,7 +65,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6">
+      <!-- <v-col cols="12" sm="6">
         <v-select
           v-model="selectedPresidents"
           :items="allPresidents"
@@ -75,7 +75,7 @@
           hint="Pick presidents to display"
           persistent-hint
         ></v-select>
-      </v-col>
+      </v-col> -->
     </v-row>
     <LineChartGenerator
       :chart-options="chartOptions"
