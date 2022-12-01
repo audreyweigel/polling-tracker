@@ -27,9 +27,10 @@
       <br />
     </div>
     <v-tabs>
-      <v-tab>Comparing Ratings</v-tab>
-      <v-tab>Ratings Over Time</v-tab>
-      <v-tab>Presidential Approval</v-tab>
+      <v-tab>Comparing Presidents</v-tab>
+      <v-tab>Over Time</v-tab>
+      <v-tab>By President</v-tab>
+      <v-tab>Interactivity</v-tab>
       <v-tab-item>
         <br />
         <h2>Highest Ratings</h2>
@@ -66,6 +67,16 @@
         </h3>
         <PresidentialLineChart />
       </v-tab-item>
+      <v-tab-item>
+        <br />
+        <h2>Interactivity</h2>
+        <br />
+        <h3>
+          Select different presidents to visualize their approval ratings over
+          time.
+        </h3>
+        <InteractiveChart />
+      </v-tab-item>
     </v-tabs>
   </v-container>
 </template>
@@ -75,6 +86,7 @@ import BarChart from "@/components/BarChartHighest";
 import BarChartCopy from "@/components/BarChartLowest";
 import LineChart from "@/components/DateLineChart";
 import PresidentialLineChart from "@/components/PresidentialLineChart";
+import InteractiveChart from "@/components/InteractiveChart";
 
 export default {
   name: "ExampleCharts",
@@ -83,6 +95,7 @@ export default {
     BarChartCopy,
     LineChart,
     PresidentialLineChart,
+    InteractiveChart,
   },
 };
 </script>
@@ -96,12 +109,8 @@ h2 {
   color: #9f1870;
 }
 
-a {
-  color: black;
-}
-
-a:visited {
-  color: #9f1870;
+.v-tab-bar {
+  overflow-x: auto;
 }
 
 h3 {

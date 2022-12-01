@@ -1,6 +1,7 @@
 <template>
   <v-app id="app">
     <nav>
+      <br />
       <router-link to="/">Home</router-link> |
       <router-link to="/example-charts">The Data</router-link> |
       <router-link to="/feeds">Feeds</router-link>

@@ -37,9 +37,7 @@
 import csv from "@/assets/approval_polls.csv";
 import { Line as LineChartGenerator } from "vue-chartjs/legacy";
 import commonMethods from "@/mixins/commonMethods.js";
-/*import { EventBus } from "/Users/audreywiggles/Documents/NodeProjects/polling-tracker/src/router/EventBus.js";
-import { mixIns, Line } from "vue-chartjs";
-const { reactiveProp } = mixIns;*/
+//import { EventBus } from "@/router/EventBus.js";
 
 import {
   Chart as ChartJS,
@@ -164,22 +162,48 @@ export default {
       );
       return this.uniqueDates(tempData);
     },
+    /*onClick: function (evt) {
+      var activePoint = this.chart.getElementAtEvent(evt);
+      console.log(activePoint);
+      var selectedPoint = activePoint[0];
+      selectedPoint.custom = this.selectedPoint.custom || {};
+      selectedPoint.custom.backgroundColor = "rgba(128,128,128,1)";
+      selectedPoint.custom.radius = 7;
+    },*/
+    /*clickHandler(evt) {
+      const points = this.chart.getElementsAtEventForMode(
+        evt,
+        "nearest",
+        { intersect: true },
+        true
+      );
+      if (points.length) {
+        const firstPoint = points[0];
+        const label = this.chart.data.labels[firstPoint.index];
+        const value =
+          this.chart.data.datasets[firstPoint.datasetIndex].data[
+            firstPoint.index
+          ];
+      }
+    },*/
     displayDataFromCsv: function () {
       // change the data to the format that chart.js needs
-      // let data = csv;
+      let data = csv;
       // let data = csv.splice(0, 500); // This uses a smaller amount of data for easier testing
       // console.log(csv);
-      let data = this.limitDataDateRange(csv); // This uses a smaller amount of data for easier testing
+      //let data = this.limitDataDateRange(csv); // This uses a smaller amount of data for easier testing
       let president = this.selectedPresidents;
       // this.presidents = president;
-      let date = this.uniqueDates(data);
-      console.log(date);
+      let date = this.presidentDates(data);
+      //console.log(date);
       //let poll = this.uniquePolls(data);
       let datasets = [];
       for (let i = 0; i < president.length; i++) {
         let presData = [];
         for (let j = 0; j < date.length; j++) {
-          let temp = data.filter((item) => item.Date === date[j]);
+          let temp = data.filter(
+            (item) => item.Date === date[j] && item.President === president[i]
+          );
           if (temp.length > 0) {
             presData.push(temp[0].Approve);
           } else {
@@ -192,14 +216,14 @@ export default {
             "#" + Math.floor(Math.random() * 16777215).toString(16),
           data: presData,
         });
-        console.log(president[i]);
-        console.log(presData);
+        //console.log(president[i]);
+        //console.log(presData);
       }
       this.chartData = {
         labels: date,
         datasets: datasets,
       };
-      console.log(this.chartData);
+      //console.log(this.chartData);
     },
   },
   computed: {
