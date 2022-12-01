@@ -9,7 +9,7 @@
     :styles="styles"
     :width="width"
     :height="height"
-    :ref="lineChart"
+    ref="lineChart"
   />
 </template>
 
@@ -18,6 +18,7 @@
 import { Line as LineChartGenerator } from "vue-chartjs/legacy";
 import commonMethods from "@/mixins/commonMethods.js";
 //import { EventBus } from "@/router/EventBus.js";
+const Chart = require("chart.js");
 
 import {
   Chart as ChartJS,
@@ -28,7 +29,6 @@ import {
   LinearScale,
   CategoryScale,
   PointElement,
-  Chart,
 } from "chart.js";
 
 ChartJS.register(
@@ -81,34 +81,34 @@ export default {
       type: Object,
       default: () => {},
     },
-    options: {
-      type: Object,
-      default: () => {},
-      events: ["click"],
-      onClick: (e) => {
-        // on click, get the active elements
-        const activePoints = this.$refs.lineChart.chart;
-        const canvasPosition = Chart.helpers.getRelativePosition(
-          e,
-          activePoints
-        );
+    // options: {
+    //   type: Object,
+    //   default: () => {},
+    //   events: ["click"],
+    //   onClick: (e) => {
+    //     // on click, get the active elements
+    //     const activePoints = this.$refs.lineChart.chart;
+    //     const canvasPosition = Chart.helpers.getRelativePosition(
+    //       e,
+    //       activePoints
+    //     );
 
-        // Substitute the appropriate scale IDs
-        const dateX = activePoints.scales.x.getValueForPixel(canvasPosition.x);
-        const approvalY = activePoints.scales.y.getValueForPixel(
-          canvasPosition.y
-        );
+    //     // Substitute the appropriate scale IDs
+    //     const dateX = activePoints.scales.x.getValueForPixel(canvasPosition.x);
+    //     const approvalY = activePoints.scales.y.getValueForPixel(
+    //       canvasPosition.y
+    //     );
 
-        // redirect to the appropriate page
-        this.$router.push({
-          name: "presidential",
-          params: {
-            date: dateX,
-            approval: approvalY,
-          },
-        });
-      },
-    },
+    //     // redirect to the appropriate page
+    //     this.$router.push({
+    //       name: "presidential",
+    //       params: {
+    //         date: dateX,
+    //         approval: approvalY,
+    //       },
+    //     });
+    //   },
+    // },
   },
   data() {
     return {
@@ -140,6 +140,25 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
+        onClick: (e) => {
+          // on click, get the active elements
+          const activePoints = this.$refs.lineChart.getCurrentChart();
+          // let newChart = new ChartJS();
+          console.log(Chart);
+          const canvasPosition = Chart.helpers.getRelativePosition(
+            e,
+            activePoints
+          );
+
+          // Substitute the appropriate scale IDs
+          const dateX = activePoints.scales.x.getValueForPixel(
+            canvasPosition.x
+          );
+          const approvalY = activePoints.scales.y.getValueForPixel(
+            canvasPosition.y
+          );
+          console.log(dateX, " ", approvalY);
+        },
       },
       // show selected presidents on chart
       selectedPresidents: [],
